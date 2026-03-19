@@ -14,8 +14,8 @@ describe("commands/execute/initial-execute-input", () => {
       isTTYstdin: false,
     });
 
-    await expect(initialExecuteInput(executionContext, undefined)).rejects.toThrow(
-      /must be run interactively/,
-    );
+    await expect(
+      initialExecuteInput(executionContext, undefined),
+    ).rejects.toThrow(/must be run interactively/);
   });
 });

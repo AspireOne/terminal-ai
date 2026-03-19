@@ -33,7 +33,10 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
     .description("Effortless AI in the terminal")
     .version(packageJson.version)
     .option("-c, --copy", "Copy output to clipboard and exit")
-    .option("-e, --execute", "Generate a shell command and choose whether to run it")
+    .option(
+      "-e, --execute",
+      "Generate a shell command and choose whether to run it",
+    )
     .option("-r, --raw", "Do not format or highlight markdown output")
     .option(
       "-f, --file <path>",

@@ -1,4 +1,7 @@
-import { selectExecuteAction, ExecuteAction } from "../../ui/select-execute-action";
+import {
+  selectExecuteAction,
+  ExecuteAction,
+} from "../../ui/select-execute-action";
 import { initialChatContext } from "../../chat-pipeline/ChatContext";
 import { executeExecutePipeline } from "../../chat-pipeline/execute-pipeline-completion-api";
 import { ensureApiKey } from "../../chat-pipeline/stages/ensure-api-key";
@@ -13,8 +16,10 @@ export async function handleExecuteCommand(
   command: string,
   executionContext: ExecutionContext,
   selectAction: () => Promise<ExecuteAction> = selectExecuteAction,
-  runCommand: (command: string, interactive: boolean) => Promise<void> =
-    execCommand,
+  runCommand: (
+    command: string,
+    interactive: boolean,
+  ) => Promise<void> = execCommand,
 ) {
   console.log(printMessage(command, executionContext.isTTYstdout));
 
@@ -42,7 +47,10 @@ export async function execute(
 
   await ensureApiKey(executionContext);
 
-  const executeInput = await initialExecuteInput(executionContext, inputMessage);
+  const executeInput = await initialExecuteInput(
+    executionContext,
+    inputMessage,
+  );
   const chatContext = {
     ...initialChatContext(),
     filePathsOutbox: files,
