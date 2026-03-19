@@ -1,6 +1,6 @@
 name: AI Developer Guide - Apply Best Practices
 description: Based on the AI developer guide propose best practices to improve code, documentation, developer experience and more.
-model: gpt-4o-mini
+model: gpt-5.4
 modelParameters:
   temperature: 0.5
 messages:
