@@ -13,7 +13,7 @@ export const FullscreenInputAction: ChatAction = {
       message: "Ready to provide fullscreen input?",
       default: "",
       postfix: "txt",
-      waitForUseInput: false,
+      waitForUserInput: false,
     });
     //  Delete the previous line, i.e. the selection line, so that the output
     //  stays clean.

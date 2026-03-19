@@ -34,9 +34,14 @@ export function loadConfigationFromPromptsFolder(
     promptsFolder,
     ConfigurationPaths.CodePromptsOutputFolder,
   );
+  const executePromptsFolder = path.join(
+    promptsFolder,
+    ConfigurationPaths.ExecutePromptsOutputFolder,
+  );
 
   debug(`loading chat prompts from: ${chatPromptsFolder}`);
   debug(`loading code prompts from: ${codePromptsFolder}`);
+  debug(`loading execute prompts from: ${executePromptsFolder}`);
 
   return {
     prompts: {
@@ -45,6 +50,9 @@ export function loadConfigationFromPromptsFolder(
       },
       code: {
         output: loadPrompts(codePromptsFolder),
+      },
+      execute: {
+        output: loadPrompts(executePromptsFolder),
       },
     },
   };
@@ -106,6 +114,15 @@ export function hydratePromptsFolder(
     destinationFolder,
     ConfigurationPaths.CodePromptsOutputFolder,
   );
+  const executeSrc = path.join(
+    sourceFolder,
+    ConfigurationPaths.ExecutePromptsOutputFolder,
+  );
+  const executeDest = path.join(
+    destinationFolder,
+    ConfigurationPaths.ExecutePromptsOutputFolder,
+  );
   hydrateFolder(chatSrc, chatDest);
   hydrateFolder(codeSrc, codeDest);
+  hydrateFolder(executeSrc, executeDest);
 }

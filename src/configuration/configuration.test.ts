@@ -16,6 +16,9 @@ describe("configuration", () => {
           code: {
             output: [],
           },
+          execute: {
+            output: [],
+          },
         },
         ui: {
           showProviderAndModel: false,

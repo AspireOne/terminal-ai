@@ -11,6 +11,7 @@ describe("configuration", () => {
     let tempConfigPromptsFolder: string;
     let tempConfigChatPromptsFolder: string;
     let tempConfigCodePromptsFolder: string;
+    let tempConfigExecutePromptsFolder: string;
 
     beforeEach(() => {
       tempTestFolder = fs.mkdtempSync(`ai-tests`);
@@ -35,10 +36,15 @@ describe("configuration", () => {
         tempConfigPromptsFolder,
         ConfigurationPaths.CodePromptsOutputFolder,
       );
+      tempConfigExecutePromptsFolder = path.join(
+        tempConfigPromptsFolder,
+        ConfigurationPaths.ExecutePromptsOutputFolder,
+      );
       fs.mkdirSync(tempConfigFolder, { recursive: true });
       fs.mkdirSync(tempConfigPromptsFolder, { recursive: true });
       fs.mkdirSync(tempConfigChatPromptsFolder, { recursive: true });
       fs.mkdirSync(tempConfigCodePromptsFolder, { recursive: true });
+      fs.mkdirSync(tempConfigExecutePromptsFolder, { recursive: true });
     });
 
     afterEach(() => {
@@ -57,6 +63,10 @@ describe("configuration", () => {
       fs.writeFileSync(
         path.join(tempConfigCodePromptsFolder, "context.txt"),
         `this is code context`,
+      );
+      fs.writeFileSync(
+        path.join(tempConfigExecutePromptsFolder, "context.txt"),
+        `this is execute context`,
       );
 
       //  Write a config file - note this will override the default config
@@ -118,6 +128,9 @@ prompts:
           },
           code: {
             output: ["this is code context", "this is additional code context"],
+          },
+          execute: {
+            output: ["this is execute context"],
           },
         },
         integrations: {},

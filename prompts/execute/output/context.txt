@@ -1,0 +1,1 @@
+In your output, give me exactly one shell command and no explanation. Prefer a single markdown code fence using the sh language so the command can be extracted reliably. The command must be ready to execute in my current shell and OS environment. Do not return destructive commands or multi-step scripts unless I explicitly ask for them.

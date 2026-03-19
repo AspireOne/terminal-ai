@@ -7,6 +7,7 @@ import { execSync } from "child_process";
 import { Command } from "commander";
 
 import { chat } from "./commands/chat/chat";
+import { execute } from "./commands/execute/execute";
 import { debug as debugCommand } from "./commands/debug/debug";
 import { config as configCommand } from "./commands/config/config";
 import theme from "./theme";
@@ -32,6 +33,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
     .description("Effortless AI in the terminal")
     .version(packageJson.version)
     .option("-c, --copy", "Copy output to clipboard and exit")
+    .option("-e, --execute", "Generate a shell command and choose whether to run it")
     .option("-r, --raw", "Do not format or highlight markdown output")
     .option(
       "-f, --file <path>",
@@ -57,12 +59,26 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           contextPrompts,
           outputPrompts,
           copy,
+          execute: executeFlag,
           raw,
           assistant,
           file,
           imageFile,
         },
       ) => {
+        if (executeFlag) {
+          return execute(
+            executionContext,
+            input,
+            contextPrompts,
+            outputPrompts,
+            copy,
+            assistant,
+            file,
+            imageFile,
+          );
+        }
+
         return chat(
           executionContext,
           input,

@@ -65,6 +65,9 @@ describe("configuration", () => {
             code: {
               output: [],
             },
+            execute: {
+              output: [],
+            },
           },
           ui: {
             showProviderAndModel: false,
@@ -114,6 +117,22 @@ describe("configuration", () => {
             },
           },
         });
+      });
+
+      it("correctly enriches execute prompts", () => {
+        const config = getDefaultConfiguration();
+        const partial: DeepPartial<Configuration> = {
+          prompts: {
+            execute: {
+              output: ["return one shell command"],
+            },
+          },
+        };
+
+        const enriched = enrichConfiguration(config, partial);
+        expect(enriched.prompts.execute.output).toEqual([
+          "return one shell command",
+        ]);
       });
     });
   });

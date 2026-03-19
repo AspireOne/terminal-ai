@@ -52,6 +52,7 @@ Quick links:
 - [Attaching Images](#attaching-images)
 - [Copying to the Clipboard or Saving to a File](#copying-to-the-clipboard-or-saving-to-a-file)
 - [Writing Code](#writing-code)
+- [Executing Commands](#executing-commands)
 - [Executing Scripts](#executing-scripts)
 - [Piping Input](#piping-input)
 - [Adding a New Provider](#adding-a-new-provider)
@@ -154,6 +155,27 @@ ai -- "code: Python code to find largest file in current directory" > findfile.p
 
 The `code` output intent tries to ensure that a _single_ code block is created, rather than multiple blocks in multiple languages. It does this by asking for a single listing with comments used to indicate whether other scripts or operations are needed.
 
+### Executing Commands
+
+If you want Terminal AI to generate a shell command and let you decide whether to run it immediately, use the `-e` or `--execute` flag:
+
+```bash
+ai -e -- "print the path to the currently active python"
+```
+
+This workflow generates a single executable command line, prints it, and then offers:
+
+- `Execute` to run the command and exit
+- `Exit` to quit without running anything
+
+The command is generated with the same context prompts as chat, so the model is told about your current shell and OS. If needed, it may return a single command line that uses chaining or pipes.
+
+Notes:
+
+- `-e` is a command workflow, not a chat reply action
+- `-e` currently supports the Completions API only and cannot be used with `--assistant`
+- `-e` cannot be combined with `--copy` or `--no-output-prompts`
+
 ### Executing Scripts
 
 You can execute scripts by asking for `code` output, pressing 'Enter' in the response prompt to open the Actions menu and then choosing 'Execute Response'. Terminal AI will ask you to verify the code (using your configured `$EDITOR`) and then ask for confirmation before executing:
@@ -229,11 +251,18 @@ The following parameters are available:
 | Parameter              | Description                                                             |
 |------------------------|-------------------------------------------------------------------------|
 | `-c, --copy`           | Copy response to the clipboard and exit.                                |
+| `-e, --execute`        | Generate a shell command, then choose whether to execute it and exit.   |
 | `-r, --raw`            | Do not format markdown or change the response in any way.               |
 | `-f, --file <path>`    | (Multiple allowed). Attach file to the chat.                            |
 | `--assistant`          | ([Experimental](docs/experimental-features.md)). Use the Assistants API rather than the Completions API. |
 | `--no-context-prompts` | Disable context prompts (e.g. 'my shell is bash').                      |
 | `--no-output-prompts`  | Disable output prompts (e.g. 'show code only').                         |
+
+When using `-e`:
+
+- `--assistant` is not supported
+- `--copy` is not supported
+- `--no-output-prompts` is not supported
 
 **`ai init`**
 

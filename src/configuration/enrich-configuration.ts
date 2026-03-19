@@ -51,6 +51,10 @@ export function enrichConfiguration(
     const prompts = data.prompts.code.output.filter((p) => p !== undefined);
     newConfig.prompts.code.output.push(...prompts);
   }
+  if (data?.prompts?.execute?.output !== undefined) {
+    const prompts = data.prompts.execute.output.filter((p) => p !== undefined);
+    newConfig.prompts.execute.output.push(...prompts);
+  }
 
   //  Langfuse configuration.
   if (data?.integrations?.langfuse !== undefined) {

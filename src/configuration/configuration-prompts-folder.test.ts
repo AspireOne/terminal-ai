@@ -24,6 +24,9 @@ describe("configuration", () => {
       expect(config.prompts?.code?.output?.[0]).toMatch(
         /In your output, give me code only/,
       );
+      expect(config.prompts?.execute?.output?.[0]).toMatch(
+        /exactly one shell command/,
+      );
     });
   });
 
@@ -62,6 +65,15 @@ describe("configuration", () => {
           path.join(
             tempPromptsFolder,
             ConfigurationPaths.CodePromptsOutputFolder,
+            "context.txt",
+          ),
+        ),
+      );
+      expect(
+        fs.existsSync(
+          path.join(
+            tempPromptsFolder,
+            ConfigurationPaths.ExecutePromptsOutputFolder,
             "context.txt",
           ),
         ),

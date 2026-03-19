@@ -6,6 +6,7 @@ export const ConfigurationPaths = {
   PromptsFolder: "prompts",
   ChatPromptsContextFolder: "chat/context",
   CodePromptsOutputFolder: "code/output",
+  ExecutePromptsOutputFolder: "execute/output",
 };
 
 export type DeepPartial<T> = T extends object
@@ -29,6 +30,9 @@ export interface Configuration {
       context: string[];
     };
     code: {
+      output: string[];
+    };
+    execute: {
       output: string[];
     };
   };
@@ -83,6 +87,9 @@ export function getDefaultConfiguration(): Configuration {
         context: [],
       },
       code: {
+        output: [],
+      },
+      execute: {
         output: [],
       },
     },
