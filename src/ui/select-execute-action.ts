@@ -2,6 +2,7 @@ import { select } from "@inquirer/prompts";
 
 export enum ExecuteAction {
   Execute = "execute",
+  Edit = "edit",
   Exit = "exit",
 }
 
@@ -12,6 +13,10 @@ export async function selectExecuteAction(): Promise<ExecuteAction> {
       {
         name: "Execute",
         value: ExecuteAction.Execute,
+      },
+      {
+        name: "Edit",
+        value: ExecuteAction.Edit,
       },
       {
         name: "Exit",
