@@ -21,6 +21,7 @@ import { translateError } from "./lib/translate-error";
 import { createExecutionContext } from "./execution-context/create-execution-context";
 import { ConfigurationPaths } from "./configuration/configuration";
 import { hydratePromptsFolder } from "./configuration/configuration-prompts-folder";
+import { commit } from "./commands/commit/commit";
 
 const cli = async (program: Command, executionContext: ExecutionContext) => {
   //  Collect sting parameters.
@@ -37,6 +38,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
       "-e, --execute",
       "Generate a shell command and choose whether to run it",
     )
+    .option("--commit", "Generate a git commit command from staged changes")
     .option("-r, --raw", "Do not format or highlight markdown output")
     .option(
       "-f, --file <path>",
@@ -62,6 +64,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           contextPrompts,
           outputPrompts,
           copy,
+          commit: commitFlag,
           execute: executeFlag,
           raw,
           assistant,
@@ -69,6 +72,19 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           imageFile,
         },
       ) => {
+        if (commitFlag) {
+          return commit(
+            executionContext,
+            input,
+            contextPrompts,
+            copy,
+            assistant,
+            executeFlag,
+            file,
+            imageFile,
+          );
+        }
+
         if (executeFlag) {
           return execute(
             executionContext,

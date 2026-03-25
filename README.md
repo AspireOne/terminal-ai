@@ -141,6 +141,20 @@ You can also copy to the clipboard by piping to a program like `pbcopy`. This ex
 ai -- "code: bash script to zip all files in current directory" | pbcopy
 ```
 
+You can generate a git commit command from staged changes with `--commit`:
+
+```bash
+ai --commit
+```
+
+You can also provide extra guidance to shape the message:
+
+```bash
+ai --commit "focus on the CLI flag addition"
+```
+
+This workflow prints the generated `git commit ...` command and then lets you choose whether to execute it or exit. In non-interactive use, the command is printed and the tool exits.
+
 ### Writing Code
 
 If you want a response to only contain code, prefix your message with `code:`. This makes it much easier to create a response which is ready to be pasted into a file or saved and executed:
@@ -251,6 +265,7 @@ The following parameters are available:
 | Parameter              | Description                                                             |
 |------------------------|-------------------------------------------------------------------------|
 | `-c, --copy`           | Copy response to the clipboard and exit.                                |
+| `--commit`             | Generate a `git commit ...` command from staged changes, then choose whether to execute it. |
 | `-e, --execute`        | Generate a shell command, then choose whether to execute it and exit.   |
 | `-r, --raw`            | Do not format markdown or change the response in any way.               |
 | `-f, --file <path>`    | (Multiple allowed). Attach file to the chat.                            |
