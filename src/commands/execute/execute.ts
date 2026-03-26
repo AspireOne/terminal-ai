@@ -77,6 +77,7 @@ export async function execute(
   enableOutputPrompts: boolean,
   copy: boolean,
   assistant: boolean,
+  think: boolean,
   files: string[],
   imageFiles: string[],
 ) {
@@ -109,6 +110,7 @@ export async function execute(
         enableOutputPrompts,
         copy: false,
         raw: false,
+        think,
       },
     });
 

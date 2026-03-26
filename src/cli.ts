@@ -39,6 +39,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
       "Generate a shell command and choose whether to run it",
     )
     .option("--commit", "Generate a git commit command from staged changes")
+    .option("-t, --think", "Enable model thinking (reasoning) at medium level")
     .option("-r, --raw", "Do not format or highlight markdown output")
     .option(
       "-f, --file <path>",
@@ -66,6 +67,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           copy,
           commit: commitFlag,
           execute: executeFlag,
+          think,
           raw,
           assistant,
           file,
@@ -80,6 +82,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
             copy,
             assistant,
             executeFlag,
+            think,
             file,
             imageFile,
           );
@@ -93,6 +96,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
             outputPrompts,
             copy,
             assistant,
+            think,
             file,
             imageFile,
           );
@@ -106,6 +110,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           copy,
           raw,
           assistant,
+          think,
           file,
           imageFile,
         );
@@ -124,6 +129,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
           undefined,
           true,
           true,
+          false,
           false,
           false,
           false,

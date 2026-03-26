@@ -11,6 +11,7 @@ describe("buildContext", () => {
       options: {
         copy: false,
         raw: false,
+        think: false,
         enableContextPrompts: true,
         enableOutputPrompts: true,
       },
@@ -32,6 +33,7 @@ describe("buildContext", () => {
       options: {
         copy: false,
         raw: false,
+        think: false,
         enableContextPrompts: true,
         enableOutputPrompts: true,
       },

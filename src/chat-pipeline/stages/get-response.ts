@@ -31,10 +31,19 @@ export async function getCompletionsResponse(
         input: messages,
       });
     }
-    const completion = await openai.chat.completions.create({
-      messages,
-      model: params.executionContext.provider.model,
-    });
+    const completionRequest: OpenAI.Chat.Completions.ChatCompletionCreateParams =
+      {
+        messages,
+        model: params.executionContext.provider.model,
+      };
+    if (
+      params.options.think &&
+      params.executionContext.provider.type !== "gemini_openai" &&
+      params.executionContext.provider.type !== "openai_compatible"
+    ) {
+      completionRequest.reasoning_effort = "medium";
+    }
+    const completion = await openai.chat.completions.create(completionRequest);
     generation?.end({ output: completion });
     spinner.stop();
 

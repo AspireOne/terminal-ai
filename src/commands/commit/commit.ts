@@ -61,6 +61,7 @@ export async function commit(
   copy: boolean,
   assistant: boolean,
   executeFlag: boolean,
+  think: boolean,
   files: string[],
   imageFiles: string[],
   deps: CommitDependencies = {
@@ -113,6 +114,7 @@ export async function commit(
         enableOutputPrompts: false,
         copy: false,
         raw: true,
+        think,
       },
     },
     buildCommitSystemPrompt(),

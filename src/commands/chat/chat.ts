@@ -15,6 +15,7 @@ export async function chat(
   copy: boolean,
   raw: boolean,
   assistant: boolean,
+  think: boolean,
   files: string[],
   imageFiles: string[],
 ) {
@@ -38,6 +39,7 @@ export async function chat(
         enableOutputPrompts,
         copy,
         raw,
+        think,
       },
     });
   } else {
@@ -50,6 +52,7 @@ export async function chat(
         enableOutputPrompts,
         copy,
         raw,
+        think,
       },
     });
   }

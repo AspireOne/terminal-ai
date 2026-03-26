@@ -10,5 +10,6 @@ export type ChatPipelineParameters = {
     enableOutputPrompts: boolean;
     copy: boolean;
     raw: boolean;
+    think: boolean;
   };
 };
