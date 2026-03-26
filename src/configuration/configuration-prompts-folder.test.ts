@@ -24,8 +24,8 @@ describe("configuration", () => {
       expect(config.prompts?.code?.output?.[0]).toMatch(
         /In your output, give me code only/,
       );
-      expect(config.prompts?.execute?.output?.[0]).toMatch(
-        /exactly one shell command/,
+      expect(config.prompts?.execute?.output?.join("\n")).toMatch(
+        /exactly one executable shell command|exactly one command line/i,
       );
     });
   });

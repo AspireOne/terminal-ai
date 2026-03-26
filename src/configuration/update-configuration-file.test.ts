@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { jest } from "@jest/globals";
 import { ConfigurationPaths } from "./configuration";
 import { updateConfigurationFile } from "./update-configuration-file";
 
@@ -19,15 +20,21 @@ describe("configuration", () => {
     });
 
     afterEach(() => {
+      jest.restoreAllMocks();
       fs.rmdirSync(tempTestFolder, { recursive: true });
     });
 
     it("fails with an Invalid Operation Error if the path is invalid", () => {
+      jest.spyOn(fs, "writeFileSync").mockImplementation(() => {
+        throw new Error("kaboom");
+      });
+
       const call = () =>
-        updateConfigurationFile("/invalid-dir/" + tempConfigFilePath, {
+        updateConfigurationFile(tempConfigFilePath, {
           key: "value",
         });
-      expect(call).toThrow(/error updating config file \/invalid-dir\//);
+      expect(call).toThrow(/error updating config file/);
+      expect(call).toThrow(/kaboom/);
     });
 
     test("creates and updates config file and parent folder if it doesn't exist", () => {

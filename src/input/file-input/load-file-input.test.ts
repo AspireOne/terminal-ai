@@ -1,6 +1,10 @@
 import { FileInput, FileInputType } from "./file-input";
 import { loadFileInput } from "./load-file-input";
 
+function normalizeNewlines(value: string) {
+  return value.replace(/\r\n/g, "\n");
+}
+
 describe("input", () => {
   const testWhitePixelPath =
     "./src/input/file-input/test-files/test-white-pixel.jpg";
@@ -31,7 +35,10 @@ export interface FileInput {
 \`\`\`
 `,
         };
-        expect(fileInput).toStrictEqual(expected);
+        expect({
+          ...fileInput,
+          content: normalizeNewlines(fileInput.content),
+        }).toStrictEqual(expected);
       });
 
       it("can load a test test code file with no extension", async () => {
@@ -52,7 +59,10 @@ export interface FileInput {
 }
 `,
         };
-        expect(fileInput).toStrictEqual(expected);
+        expect({
+          ...fileInput,
+          content: normalizeNewlines(fileInput.content),
+        }).toStrictEqual(expected);
       });
 
       it("can load a test binary image file", async () => {
