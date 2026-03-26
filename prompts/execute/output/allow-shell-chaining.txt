@@ -1,1 +1,1 @@
-If the user's request cannot be satisfied by a single simple program invocation, you may return one shell command line that chains commands with shell operators such as &&, ||, pipes, or command substitution when appropriate. Keep it to one executable command line, not a commented script or explanation.
+When necessary, you may solve the request with one compound command line using shell operators such as pipes, &&, ||, or command substitution, but still return exactly one command line and nothing else.
