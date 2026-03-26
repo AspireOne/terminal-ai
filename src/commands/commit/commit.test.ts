@@ -1,6 +1,7 @@
 import { jest } from "@jest/globals";
 import { createTestExecutionContext } from "../../execution-context/create-test-execution-context";
 import { ExecuteAction } from "../../ui/select-execute-action";
+import { CommitContextFile } from "./build-commit-prompt";
 import { commit } from "./commit";
 
 describe("commands/commit/commit", () => {
@@ -13,6 +14,12 @@ describe("commands/commit/commit", () => {
     })),
     getBranchName: jest.fn(() => "feature/commit-mode"),
     getRecentCommitSubjects: jest.fn(() => ["feat: existing style"]),
+    collectCommitContext: jest.fn((): CommitContextFile[] => [
+      {
+        path: "./AGENTS.md",
+        content: "Repository conventions",
+      },
+    ]),
     executeCommitPipeline: jest.fn(async () =>
       JSON.stringify({
         subject: "feat(cli): add commit mode",
@@ -52,6 +59,13 @@ describe("commands/commit/commit", () => {
 
     expect(deps.writeOutput).toHaveBeenCalledWith(
       "git commit -m 'feat(cli): add commit mode' -m '- inspect staged changes'\n",
+    );
+    const executeCall = deps.executeCommitPipeline.mock.calls[0] as unknown as [
+      { inputMessage: string },
+      string,
+    ];
+    expect(executeCall[0].inputMessage).toContain(
+      "--- BEGIN CONTEXT FILE: ./AGENTS.md ---",
     );
     expect(deps.selectAction).toHaveBeenCalled();
     expect(deps.runCommand).not.toHaveBeenCalled();

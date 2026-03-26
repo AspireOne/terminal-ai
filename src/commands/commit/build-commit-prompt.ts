@@ -1,5 +1,10 @@
 import { CommitMessage, GitStagedDiff } from "./git";
 
+export type CommitContextFile = {
+  path: string;
+  content: string;
+};
+
 export function buildCommitSystemPrompt(): string {
   return [
     "You generate git commit messages from repository context.",
@@ -20,8 +25,29 @@ export function buildCommitUserPrompt(args: {
   branchName: string | null;
   recentCommitSubjects: string[];
   guidance?: string;
+  repositoryContext: CommitContextFile[];
 }): string {
-  const { stagedDiff, branchName, recentCommitSubjects, guidance } = args;
+  const {
+    stagedDiff,
+    branchName,
+    recentCommitSubjects,
+    guidance,
+    repositoryContext,
+  } = args;
+  const repositoryContextSection =
+    repositoryContext.length > 0
+      ? [
+          "Repository context:",
+          "These files are supplemental context only. Focus primarily on the staged git changes when generating the commit message.",
+          ...repositoryContext.flatMap((file) => [
+            `--- BEGIN CONTEXT FILE: ${file.path} ---`,
+            file.content,
+            "--- END CONTEXT FILE ---",
+          ]),
+          "",
+        ]
+      : [];
+
   const sections = [
     branchName ? `Current branch: ${branchName}` : "Current branch: unknown",
     "",
@@ -33,6 +59,7 @@ export function buildCommitUserPrompt(args: {
       ? recentCommitSubjects.map((subject) => `- ${subject}`)
       : ["- None available"]),
     "",
+    ...repositoryContextSection,
     guidance ? `Additional user guidance: ${guidance}` : undefined,
     guidance ? "" : undefined,
     "Git diff:",

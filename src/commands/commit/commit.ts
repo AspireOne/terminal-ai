@@ -12,6 +12,7 @@ import {
   buildCommitSystemPrompt,
   buildCommitUserPrompt,
 } from "./build-commit-prompt";
+import { collectCommitContext } from "./collect-commit-context";
 import { extractCommitMessageFromResponse } from "./extract-commit-message-from-response";
 import {
   assertGitRepo,
@@ -28,6 +29,7 @@ type CommitDependencies = {
   getStagedDiff: typeof getStagedDiff;
   getBranchName: typeof getBranchName;
   getRecentCommitSubjects: typeof getRecentCommitSubjects;
+  collectCommitContext: typeof collectCommitContext;
   executeCommitPipeline: typeof executeCommitPipeline;
   extractCommitMessageFromResponse: (response: string) => CommitMessage;
   buildGitCommitCommand: typeof buildGitCommitCommand;
@@ -70,6 +72,7 @@ export async function commit(
     getStagedDiff,
     getBranchName,
     getRecentCommitSubjects,
+    collectCommitContext,
     executeCommitPipeline,
     extractCommitMessageFromResponse,
     buildGitCommitCommand,
@@ -95,6 +98,8 @@ export async function commit(
     );
   }
 
+  const repositoryContext = deps.collectCommitContext(process.cwd());
+
   const response = await deps.executeCommitPipeline(
     {
       executionContext,
@@ -108,6 +113,7 @@ export async function commit(
         branchName: deps.getBranchName(),
         recentCommitSubjects: deps.getRecentCommitSubjects(),
         guidance: inputMessage,
+        repositoryContext,
       }),
       options: {
         enableContextPrompts,
