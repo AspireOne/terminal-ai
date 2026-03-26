@@ -11,7 +11,7 @@ npm install
 npm start
 
 # If 'actionlint' is installed, the GitHub workflows will be linted.
-brew install actionlint
+npm run init
 ```
 
 If you want to install the `ai` command run the following:
@@ -49,6 +49,7 @@ The following commands are helpful when testing:
 # Run all tests. Run tests with coverage.
 npm run test
 npm run test:cov
+npm run test:e2e
 
 # Run (or watch, or debug) tests that match a pattern.
 npm run test -- theme

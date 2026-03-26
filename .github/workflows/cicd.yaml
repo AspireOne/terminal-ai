@@ -63,7 +63,7 @@ jobs:
 
       # Validate that we can install wiht 'npm install' and then run 'ai'.
       - name: validate install
-        run: ./tests/test-install.sh
+        run: npm run test:install
         env:
           TESTING_AI_API_KEY: ${{ secrets.TESTING_AI_API_KEY }}
 
@@ -111,15 +111,23 @@ jobs:
 
   test-e2e:
     name: E2E Tests
-    needs: validate
-    runs-on: ubuntu-24.04
+    needs:
+      - validate
+      - validate-windows
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-24.04
+          - windows-latest
 
     steps: 
       - name: Checkout
         uses: actions/checkout@v4
 
       # Setup the right version of Node.js.
-      - name: Setup Node ${{ matrix.node-version }}
+      - name: Setup Node ${{ env.NODE_LTS_VERSION }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_LTS_VERSION }}
@@ -134,7 +142,7 @@ jobs:
 
       # Validate that we can install wiht 'npm install' and then run 'ai'.
       - name: test-e2e
-        run: make test-e2e
+        run: npm run test:e2e
         env:
           TESTING_AI_API_KEY: ${{ secrets.TESTING_AI_API_KEY }}
 
@@ -160,7 +168,7 @@ jobs:
         uses: actions/checkout@v4
 
       # Setup the right version of Node.js.
-      - name: Setup Node ${{ matrix.node-version }}
+      - name: Setup Node ${{ env.NODE_LTS_VERSION }}
         if: ${{ steps.release.outputs.release_created }}
         uses: actions/setup-node@v4
         with:
@@ -178,15 +186,8 @@ jobs:
       - name: Publish to NPM
         if: ${{ steps.release.outputs.release_created }}
         run: |
-          # The 'npm publish' command will only run if an NPM_TOKEN secret is
-          # set. If it is not set, warn the user.
-          if [ "$NODE_AUTH_TOKEN" == "" ]; then
-            echo "The 'NPM_TOKEN' secret must be set to deploy to NPM"
-            exit 1
-          else
-            echo "The 'NPM_TOKEN' secret has been set - deploying to NPM..."
-            npm publish --access=public
-          fi
+          node -e "if (!process.env.NODE_AUTH_TOKEN) { console.error(\"The 'NPM_TOKEN' secret must be set to deploy to NPM\"); process.exit(1); }"
+          npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
@@ -196,3 +197,34 @@ jobs:
         run: |
           npm set //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
           npm publish --registry https://npm.pkg.github.com
+  validate-windows:
+    name: Validate Windows
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node ${{ env.NODE_LTS_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_LTS_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: install
+        run: npm install
+
+      - name: lint
+        run: npm run lint
+
+      - name: build
+        run: npm run build
+
+      - name: test
+        run: npm run test
+
+      - name: validate install
+        run: npm run test:install
+        env:
+          TESTING_AI_API_KEY: ${{ secrets.TESTING_AI_API_KEY }}

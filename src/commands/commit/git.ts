@@ -1,5 +1,6 @@
 import { execFileSync } from "child_process";
 import { ErrorCode, TerminalAIError } from "../../lib/errors";
+import { detectShell } from "../../lib/shell";
 
 export type GitStagedDiff = {
   files: string[];
@@ -10,8 +11,6 @@ export type CommitMessage = {
   subject: string;
   body: string;
 };
-
-type ShellType = "powershell" | "cmd" | "sh";
 
 type GitRunner = (args: string[]) => string;
 
@@ -114,30 +113,10 @@ export function getRecentCommitSubjects(
   }
 }
 
-function detectShell(
-  env: NodeJS.ProcessEnv,
-  platform: NodeJS.Platform = process.platform,
-): ShellType {
-  const shell = (env["SHELL"] || "").toLowerCase();
-  const comSpec = (env["ComSpec"] || env["COMSPEC"] || "").toLowerCase();
-
-  if (
-    shell.includes("pwsh") ||
-    shell.includes("powershell") ||
-    "PSModulePath" in env
-  ) {
-    return "powershell";
-  }
-  if (shell) {
-    return "sh";
-  }
-  if (comSpec.includes("cmd.exe")) {
-    return "cmd";
-  }
-  return platform === "win32" ? "powershell" : "sh";
-}
-
-function quoteForShell(value: string, shell: ShellType): string {
+function quoteForShell(
+  value: string,
+  shell: ReturnType<typeof detectShell>,
+): string {
   if (shell === "powershell") {
     return `'${value.replace(/'/g, "''")}'`;
   }

@@ -135,7 +135,7 @@ You can copy to the clipboard by specifying the `-c` or `--copy` parameter:
 ai -c -- "Travel time for London to Paris?"
 ```
 
-You can also copy to the clipboard by piping to a program like `pbcopy`. This example uses the `code` intent to ask for code output only and writes to the clipboard:
+You can also pipe to a shell-specific clipboard command. For example, on macOS you can use `pbcopy`. This example uses the `code` intent to ask for code output only and writes to the clipboard:
 
 ```bash
 ai -- "code: bash script to zip all files in current directory" | pbcopy

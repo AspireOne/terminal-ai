@@ -6,14 +6,12 @@ help: # Show help for each of the Makefile recipes.
 
 .PHONY: init
 init: # Initialise and verify the development environment.
-	./scripts/init.sh
+	npm run init
 
 .PHONY: test-e2e
 test-e2e: # run end-to-end tests
-	./tests/test-chat.sh
-	./tests/test-file-input.sh
+	npm run test:e2e
 
 .PHONY: test-e2e-assistants
 test-e2e-assistants: # run end-to-end tests with the assistants api
-	./tests/test-chat.sh ai '--assistant'
-	./tests/test-file-input.sh ai '--assistant'
+	npm run test:e2e:assistants

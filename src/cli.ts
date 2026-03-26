@@ -2,7 +2,7 @@
 
 import path from "path";
 import os from "os";
-import { execSync } from "child_process";
+import { spawnSync } from "child_process";
 
 import { Command } from "commander";
 
@@ -148,12 +148,18 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
         .command("edit")
         .description("edit config file")
         .action(() => {
-          const editor = process.env.EDITOR || "vim";
+          const editor =
+            process.env.EDITOR ||
+            (process.platform === "win32" ? "notepad" : "vim");
           const path = executionContext.configFilePath;
           try {
-            execSync(`${editor} ${path}`, {
+            const result = spawnSync(editor, [path], {
               stdio: "inherit",
+              shell: true,
             });
+            if (result.status && result.status !== 0) {
+              throw new Error(`editor exited with code ${result.status}`);
+            }
             console.log(`config file ${path} updated.`);
           } catch (error) {
             console.error(`Error editing ${path}: ${error}`);
