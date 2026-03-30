@@ -27,6 +27,9 @@ describe("configuration", () => {
       expect(config.prompts?.execute?.output?.join("\n")).toMatch(
         /exactly one executable shell command|exactly one command line/i,
       );
+      expect(config.prompts?.execute?.output?.join("\n")).toMatch(
+        /Return only the inner command text|Do not wrap the command in another shell launcher/i,
+      );
     });
   });
 

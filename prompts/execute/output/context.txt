@@ -1,5 +1,11 @@
 Return exactly one executable shell command for my current OS and shell environment.
 
+Execution contract:
+- Terminal AI will run your returned command by invoking my shell for me.
+- Return only the inner command text to run inside that shell.
+- Do not wrap the command in another shell launcher such as `powershell -Command`, `pwsh -Command`, `cmd /c`, `sh -c`, or `bash -lc` unless I explicitly ask for a nested shell.
+- Example: in PowerShell, return `Get-ChildItem`, not `powershell -NoProfile -Command "Get-ChildItem"`.
+
 Output rules:
 - Output only the command, preferably as a single markdown code fence using the sh language.
 - Do not include any explanation, comments, headings, bullets, or surrounding prose.
