@@ -25,7 +25,7 @@
     "tsc": "tsc",
     "relink": "npm run build && npm unlink ai && npm link ai",
     "postinstall": "echo \"Terminal AI installed! Run 'ai' to try it out.\"",
-    "prepare": "husky"
+    "prepare": "git config core.hooksPath .husky/_"
   },
   "files": [
     "dist",
@@ -45,8 +45,6 @@
     "@dwmkerr/ai-providers-and-models": "^0.1.13",
     "@dwmkerr/inquirer-advanced-input-prompt": "^0.1.0",
     "@inquirer/prompts": "^7.3.1",
-    "@types/js-yaml": "^4.0.9",
-    "axios": "^1.8.1",
     "clipboardy": "^4.0.0",
     "colors": "^1.4.0",
     "commander": "^11.1.0",
@@ -65,10 +63,12 @@
   "devDependencies": {
     "@types/debug": "^4.1.12",
     "@types/jest": "^29.5.14",
+    "@types/js-yaml": "^4.0.9",
     "@types/mime-types": "^2.1.4",
     "@types/mock-fs": "^4.13.4",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-prettier": "^5.0.1",

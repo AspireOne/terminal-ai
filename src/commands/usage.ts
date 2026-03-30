@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as theme from "../theme";
 import { ExecutionContext } from "../execution-context/execution-context";
 import { ErrorCode, TerminalAIError } from "../lib/errors";
@@ -41,43 +40,52 @@ export async function usage(
   console.log(formattedDate);
 
   try {
-    const response = await axios.get(
+    const response = await fetch(
       `https://api.openai.com/v1/usage?date=${formattedDate}`,
       {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${config.apiKey}`,
           "Content-Type": "application/json",
         },
       },
     );
+    if (!response.ok) {
+      throw await buildFetchError(response);
+    }
 
-    console.log(JSON.stringify(response.data));
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error(
-      "Error fetching usage:",
-      error.response ? error.response.data : error.message,
-    );
+    console.log(JSON.stringify(await response.json()));
+  } catch (error: unknown) {
+    console.error("Error fetching usage:", getErrorMessage(error));
   }
   try {
-    const response = await axios.get(
+    const response = await fetch(
       `https://api.openai.com/v1/organization/usage/completions?date=${unixSeconds}`,
       {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${config.apiKey}`,
           "Content-Type": "application/json",
         },
       },
     );
+    if (!response.ok) {
+      throw await buildFetchError(response);
+    }
 
-    console.log(response.data);
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error(
-      "Error fetching usage:",
-      error.response ? error.response.data : error.message,
-    );
+    console.log(await response.json());
+  } catch (error: unknown) {
+    console.error("Error fetching usage:", getErrorMessage(error));
   }
 
   return "";
+}
+
+async function buildFetchError(response: Response): Promise<Error> {
+  const body = await response.text();
+  return new Error(body || `${response.status} ${response.statusText}`);
+}
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
