@@ -9,6 +9,8 @@ export const CopyResponseAction: ChatAction = {
   id: "copy_response",
   displayNameInitial: "Copy Response",
   displayNameReply: "Copy Response",
+  menuTag: "CLIP",
+  descriptionReply: "Copy the latest answer to your clipboard.",
   isInitialInteractionAction: false,
   isDebugAction: false,
   weight: 1,

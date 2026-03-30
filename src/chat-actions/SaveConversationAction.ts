@@ -10,6 +10,8 @@ export const SaveConversationAction: ChatAction = {
   id: "save_conversation",
   displayNameInitial: "Save Conversation",
   displayNameReply: "Save Conversation",
+  menuTag: "LOG",
+  descriptionReply: "Export the conversation history as markdown.",
   isInitialInteractionAction: false,
   isDebugAction: false,
   weight: 0,

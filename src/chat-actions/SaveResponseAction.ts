@@ -11,6 +11,8 @@ export const SaveResponseAction: ChatAction = {
   id: "save_response",
   displayNameInitial: "Save Response",
   displayNameReply: "Save Response",
+  menuTag: "SAVE",
+  descriptionReply: "Write the latest response to a file.",
   isInitialInteractionAction: false,
   isDebugAction: false,
   weight: 1,

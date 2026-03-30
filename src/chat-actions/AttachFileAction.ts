@@ -2,11 +2,19 @@ import { select } from "@inquirer/prompts";
 import { ChatPipelineParameters } from "../chat-pipeline/ChatPipelineParameters";
 import { ChatAction } from "./ChatAction";
 import { ErrorCode, TerminalAIError } from "../lib/errors";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+} from "../ui/prompt-styles";
 
 export const AttachFileAction: ChatAction = {
   id: "attach_file",
   displayNameInitial: "Attach File",
   displayNameReply: "Attach File",
+  menuTag: "FILE",
+  descriptionInitial: "Add a document or image to the next message.",
+  descriptionReply: "Attach more context before you continue.",
   isInitialInteractionAction: true,
   isDebugAction: false,
   weight: 0,
@@ -15,22 +23,25 @@ export const AttachFileAction: ChatAction = {
   ): Promise<string | undefined> => {
     const fileSelector = (await import("inquirer-file-selector")).default;
     const path = await fileSelector({
-      message: "File path:",
+      message: promptMessage("File path:"),
       type: "file",
     });
     const fileType = await select({
-      message: "File processing mode:",
+      message: promptMessage("File processing mode:"),
       choices: [
         {
-          name: "Text",
+          name: promptChoice("Text", { tag: "TEXT" }),
           value: "text",
-          description: "Process as text. Ideal for code, documents, etc.",
+          description: promptDescription(
+            "Process as text. Ideal for code, documents, etc.",
+          ),
         },
         {
-          name: "Image",
+          name: promptChoice("Image", { tag: "VISION" }),
           value: "image",
-          description:
+          description: promptDescription(
             "Vision processing (model dependent). Enables image recognition, etc.",
+          ),
         },
       ],
     });

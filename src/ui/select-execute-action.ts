@@ -1,4 +1,9 @@
 import { select } from "@inquirer/prompts";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+} from "./prompt-styles";
 
 export enum ExecuteAction {
   Execute = "execute",
@@ -8,19 +13,24 @@ export enum ExecuteAction {
 
 export async function selectExecuteAction(): Promise<ExecuteAction> {
   return await select({
-    message: "execute:",
+    message: promptMessage("execute:"),
     choices: [
       {
-        name: "Execute",
+        name: promptChoice("Execute", { tag: "RUN" }),
         value: ExecuteAction.Execute,
+        description: promptDescription("Run the current command."),
       },
       {
-        name: "Edit",
+        name: promptChoice("Edit", { tag: "EDIT" }),
         value: ExecuteAction.Edit,
+        description: promptDescription(
+          "Open the command in your editor first.",
+        ),
       },
       {
-        name: "Exit",
+        name: promptChoice("Exit", { tag: "EXIT" }),
         value: ExecuteAction.Exit,
+        description: promptDescription("Leave without running anything."),
       },
     ],
     default: ExecuteAction.Execute,

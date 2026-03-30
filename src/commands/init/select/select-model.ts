@@ -3,6 +3,12 @@ import { providers } from "@dwmkerr/ai-providers-and-models";
 import { Choice } from "../../../lib/inquirerjs/choice";
 import { ProviderType } from "../../../providers/provider-type";
 import { getPredefinedModels } from "../../../providers/get-predefined-models";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+  promptSeparator,
+} from "../../../ui/prompt-styles";
 
 type ModelChoice = Choice<string>;
 type ModelChoices = (ModelChoice | Separator)[];
@@ -30,8 +36,10 @@ export async function selectModel(
       const model = validatedModels[m];
       return {
         value: model.id,
-        name: `${model.name} (${model.id})`,
-        description: model.description_short,
+        name: promptChoice(model.name, { tag: "TESTED" }),
+        description: promptDescription(
+          `${model.id} · ${model.description_short}`,
+        ),
         disabled: false,
       };
     })
@@ -42,9 +50,9 @@ export async function selectModel(
     .map((modelId) => {
       return {
         value: modelId,
-        name: `${modelId} *`,
+        name: promptChoice(modelId, { tag: "CUSTOM", suffix: "*" }),
         short: modelId,
-        description: `${modelId} - not fully tested`,
+        description: promptDescription(`${modelId} - not fully tested`),
         disabled: false,
       };
     })
@@ -55,23 +63,32 @@ export async function selectModel(
   //  If we have a default mode, we include a 'default' answer which is the
   //  empty string - this'll just keep what the user has already selected.
   const keepExisting: ModelChoice = {
-    name: `(Keep existing) ${defaultModel}`,
+    name: promptChoice("Keep existing", {
+      tag: "KEEP",
+      suffix: defaultModel,
+    }),
     value: defaultModel || "",
-    description: `Keep existing model ${defaultModel}`,
+    description: promptDescription(`Keep existing model ${defaultModel}`),
     disabled: false,
   };
   const choices: ModelChoices = [
     ...(defaultModel ? [keepExisting] : []),
     ...(validatedModelChoices.length > 0
-      ? [new Separator(" ────────────── "), ...validatedModelChoices]
+      ? [
+          new Separator(promptSeparator(" ────────────── tested ")),
+          ...validatedModelChoices,
+        ]
       : []),
     ...(unvalidatedModelChoices.length > 0
-      ? [new Separator(" ────────────── untested "), ...unvalidatedModelChoices]
+      ? [
+          new Separator(promptSeparator(" ────────────── untested ")),
+          ...unvalidatedModelChoices,
+        ]
       : []),
   ];
 
   const answer = (await search({
-    message: `Select model:`,
+    message: promptMessage("Select model:"),
     source: async (input): Promise<ModelChoices> => {
       //  Search models.
       const search = (models: ModelChoices, search: string) =>
@@ -102,9 +119,9 @@ export async function selectModel(
       //  _exact_ choice as the first option - essentially allowing free
       //  text entry.
       const freeTextEntry = {
-        name: input,
+        name: promptChoice(input, { tag: "FREE" }),
         value: input,
-        description: `Custom model: ${input}`,
+        description: promptDescription(`Custom model: ${input}`),
         disabled: false,
       };
       return search([freeTextEntry, ...choices], input);

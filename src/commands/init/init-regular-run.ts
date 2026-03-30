@@ -7,6 +7,11 @@ import { initUpdateProviders } from "./init-update-providers";
 import { selectProvider } from "../../ui/select-provider";
 import { updateConfigurationFile } from "../../configuration/update-configuration-file";
 import { selectModel } from "./select/select-model";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+} from "../../ui/prompt-styles";
 
 export async function initRegularRun(
   executionContext: ExecutionContext,
@@ -20,24 +25,39 @@ export async function initRegularRun(
       message: inputPrompt("Terminal AI Configuration"),
       choices: [
         {
-          name: "1. Select current provider / model",
+          name: promptChoice("Select current provider / model", { tag: "SET" }),
           value: "select_provider",
+          description: promptDescription(
+            "Choose the active provider and model.",
+          ),
         },
         {
-          name: "2. Configure or add provider",
+          name: promptChoice("Configure or add provider", { tag: "EDIT" }),
           value: "reconfigure_provider",
+          description: promptDescription(
+            "Update an existing provider or add a new one.",
+          ),
         },
         {
-          name: "3. Check configuration",
+          name: promptChoice("Check configuration", { tag: "CHECK" }),
           value: "check",
+          description: promptDescription(
+            "Validate connectivity, API key, and model setup.",
+          ),
         },
         {
-          name: "4. Chat",
+          name: promptChoice("Chat", { tag: "CHAT" }),
           value: "chat",
+          description: promptDescription(
+            "Start chatting with the current model.",
+          ),
         },
         {
-          name: "0. Exit",
+          name: promptChoice("Exit", { tag: "EXIT" }),
           value: "exit",
+          description: promptDescription(
+            "Leave configuration without chatting.",
+          ),
         },
       ],
     });
@@ -105,7 +125,7 @@ export async function initRegularRun(
     // Offer to validate configuration
     if (mainOption !== "exit" && mainOption !== "chat") {
       const validate = await confirm({
-        message: "Test API Key & Configuration?",
+        message: promptMessage("Test API Key & Configuration?"),
         default: false,
       });
       if (validate) {

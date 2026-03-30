@@ -1,5 +1,5 @@
-import colors from "colors/safe";
 import { ProviderConfiguration } from "../configuration/configuration";
+import { richBeige, softBeige, warmBeige } from "../theme";
 
 function providerAndModel(provider: ProviderConfiguration): {
   providerPart: string;
@@ -19,7 +19,7 @@ export function formatChatMenuHint(
 
   //  If we have no provider, just show the menu.
   if (!provider) {
-    return colors.grey(menuHint);
+    return richBeige(menuHint);
   }
 
   //  Get the provider details. Work out the maximum amount of space this can
@@ -40,12 +40,21 @@ export function formatChatMenuHint(
   if (providerDetails.length > maxProviderWidth) {
     const trimmedProviderHint = "...";
     const spaces = terminalWidth - menuHint.length - trimmedProviderHint.length;
-    return colors.grey(menuHint + " ".repeat(spaces) + trimmedProviderHint);
+    return (
+      richBeige(menuHint) +
+      softBeige(" ".repeat(spaces)) +
+      softBeige(trimmedProviderHint)
+    );
   }
 
   //  Calculate spaces needed to right-align the provider details
   const spaces = terminalWidth - menuHint.length - providerDetails.length;
 
   //  Return the final hint - menu, space, provider (with model in white)
-  return colors.grey(menuHint + " ".repeat(spaces) + providerPart) + modelPart;
+  return (
+    richBeige(menuHint) +
+    softBeige(" ".repeat(spaces)) +
+    (providerPart ? softBeige(providerPart) : "") +
+    warmBeige(modelPart)
+  );
 }

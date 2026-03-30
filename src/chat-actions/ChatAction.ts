@@ -17,6 +17,11 @@ export type ChatAction = {
   displayNameInitial: string;
   displayNameReply: string;
 
+  //  Optional metadata to make the action menu more expressive.
+  menuTag?: string;
+  descriptionInitial?: string;
+  descriptionReply?: string;
+
   //  Is this action available on the first interaction, e.g. before any
   //  conversation has started?
   isInitialInteractionAction: boolean;

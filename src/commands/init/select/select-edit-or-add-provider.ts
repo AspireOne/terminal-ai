@@ -2,6 +2,12 @@ import { select, Separator } from "@inquirer/prompts";
 import { Choice } from "../../../lib/inquirerjs/choice";
 import { ProviderConfiguration } from "../../../configuration/configuration";
 import { ErrorCode, TerminalAIError } from "../../../lib/errors";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+  promptSeparator,
+} from "../../../ui/prompt-styles";
 
 type ProviderChoice = Choice<string>;
 
@@ -20,32 +26,40 @@ export async function selectEditOrAddProvider(
 
   //  Add the current provider, which might be the root.
   const currentChoice: ProviderChoice = {
-    name: isRoot
-      ? "Configure Provider"
-      : `Configure ${currentProvider.name} (current)`,
+    name: promptChoice(isRoot ? "Configure Provider" : currentProvider.name, {
+      tag: "EDIT",
+      suffix: isRoot ? "(current)" : "(current)",
+    }),
     value: isRoot ? "update_root" : `update_${currentProvider.name}`,
-    description: `Configure settings for ${isRoot ? "current provider" : currentProvider.name}`,
+    description: promptDescription(
+      `Configure settings for ${isRoot ? "current provider" : currentProvider.name}`,
+    ),
   };
   //  Then the other providers.
   const nextChoices = [
     ...allProviders
       .filter((p) => p !== currentProvider)
       .map((p) => ({
-        name: `Configure ${p.name}`,
+        name: promptChoice(p.name, { tag: "EDIT" }),
         value: `update_${p.name}`,
-        description: `Configure settings for ${p.name}`,
+        description: promptDescription(`Configure settings for ${p.name}`),
       })),
   ];
   const addChoice: ProviderChoice = {
-    name: "Add Provider",
+    name: promptChoice("Add Provider", { tag: "ADD" }),
     value: "add",
-    description: "Configure and add a new provider",
+    description: promptDescription("Configure and add a new provider"),
   };
 
-  const choices = [currentChoice, ...nextChoices, new Separator(), addChoice];
+  const choices = [
+    currentChoice,
+    ...nextChoices,
+    new Separator(promptSeparator(" ────────────── ")),
+    addChoice,
+  ];
 
   const answer = await select({
-    message: "Configure / Add Provider:",
+    message: promptMessage("Configure / Add Provider:"),
     choices,
   });
 

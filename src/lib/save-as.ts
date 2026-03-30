@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { confirm } from "@inquirer/prompts";
+import { promptMessage } from "../ui/prompt-styles";
 
 function mkdirRecursive(dir: string): void {
   if (!fs.existsSync(dir)) {
@@ -29,7 +30,7 @@ export async function saveAs(
 
     //  Ask whether the user will overwrite.
     const overwrite = await confirm({
-      message: `${name} exists - overwrite?`,
+      message: promptMessage(`${name} exists - overwrite?`),
       default: false,
     });
     if (!overwrite) {

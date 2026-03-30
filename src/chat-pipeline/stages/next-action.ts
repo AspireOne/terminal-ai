@@ -5,6 +5,7 @@ import { ChatPipelineParameters } from "../ChatPipelineParameters";
 import { ChatResponse } from "./parse-response";
 import { ChatActions } from "../../chat-actions";
 import { ErrorCode, TerminalAIError } from "../../lib/errors";
+import { formatChatActionChoice } from "../../ui/format-chat-action-choice";
 
 //  If a truthy string is returned, then it should be considered the next part
 //  of the input to a chat.
@@ -25,10 +26,7 @@ export async function nextAction(
     .filter((ca) =>
       initialInputActions ? ca.isInitialInteractionAction : true,
     )
-    .map((ca) => ({
-      name: initialInputActions ? ca.displayNameInitial : ca.displayNameReply,
-      value: ca.id,
-    }));
+    .map((ca) => formatChatActionChoice(ca, initialInputActions));
 
   //  Loop until we know we've got an option we can continue with.
   //  If we receive a 'ctrl+c' then rather than quitting we'll just close the

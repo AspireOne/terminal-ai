@@ -1,5 +1,10 @@
 import { select } from "@inquirer/prompts";
 import { ProviderConfiguration } from "../configuration/configuration";
+import {
+  promptChoice,
+  promptDescription,
+  promptMessage,
+} from "./prompt-styles";
 
 /**
  * Interface for the selectProvider function parameters
@@ -44,11 +49,14 @@ export async function selectProvider({
   default: defaultProviderName,
 }: SelectProviderParams): Promise<ProviderConfiguration | null> {
   const choices = availableProviders.map((provider) => ({
-    name:
-      provider.name === currentProvider.name
-        ? `${provider.name} (current)`
-        : provider.name,
+    name: promptChoice(provider.name || "default", {
+      tag: "PROVIDER",
+      suffix: provider.name === currentProvider.name ? "(current)" : undefined,
+    }),
     value: provider,
+    description: promptDescription(
+      provider.model ? `Model ${provider.model}` : "Configured provider",
+    ),
   }));
 
   // Find the default choice based on the provider name
@@ -60,7 +68,7 @@ export async function selectProvider({
     : undefined;
 
   const selected = await select({
-    message,
+    message: promptMessage(message),
     choices,
     default: defaultValue,
   });

@@ -3,6 +3,7 @@ import { ExecutionContext } from "../../execution-context/execution-context";
 import { addOrEditProvider } from "./select/add-or-edit-provider";
 import { selectEditOrAddProvider } from "./select/select-edit-or-add-provider";
 import { updateConfigurationFile } from "../../configuration/update-configuration-file";
+import { promptMessage } from "../../ui/prompt-styles";
 
 export async function initUpdateProviders(executionContext: ExecutionContext) {
   //  Get all of the providers and check whether we're editing/adding a new one.
@@ -23,7 +24,7 @@ export async function initUpdateProviders(executionContext: ExecutionContext) {
     //  safe.
     if (executionContext.provider.name !== provider.name) {
       makeCurrent = await confirm({
-        message: "Set as current provider?",
+        message: promptMessage("Set as current provider?"),
         default: false,
       });
     } else {
@@ -36,7 +37,7 @@ export async function initUpdateProviders(executionContext: ExecutionContext) {
     //  If we chose to add, do so now.
     provider = await addOrEditProvider();
     makeCurrent = await confirm({
-      message: "Set as current provider?",
+      message: promptMessage("Set as current provider?"),
       default: false,
     });
   }

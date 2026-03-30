@@ -1,6 +1,31 @@
 import colors from "colors/safe";
 import { stripFormatting } from "./lib/markdown";
 
+const ANSI_RESET = "\u001b[0m";
+const ANSI_BOLD = "\u001b[1m";
+
+function ansi256(
+  text: string,
+  colorCode: number,
+  bold: boolean = false,
+): string {
+  const open = `\u001b[38;5;${colorCode}m`;
+  const weight = bold ? ANSI_BOLD : "";
+  return `${weight}${open}${text}${ANSI_RESET}`;
+}
+
+export function warmBeige(text: string): string {
+  return ansi256(text, 223);
+}
+
+export function softBeige(text: string): string {
+  return ansi256(text, 180);
+}
+
+export function richBeige(text: string): string {
+  return ansi256(text, 224, true);
+}
+
 export function deleteLinesAboveCursor(count: number) {
   for (let i = 0; i < count; i++) {
     // Delete previous line and move cursor up
@@ -25,24 +50,32 @@ export function printError(message: string, interactive: boolean) {
 }
 
 export function inputPrompt(prompt: string): string {
-  return colors.white(colors.bold(`${prompt}:`));
+  return richBeige(`${prompt}:`);
 }
 
 export function printHint(hint: string, interactive: boolean) {
-  return interactive ? colors.gray(hint) : hint;
+  return interactive ? softBeige(hint) : hint;
 }
 
-export async function startSpinner(_: boolean, text: string = "") {
-  // We might not need to override whether it is interactive?
-  // if (!interactive) {
-  //   return {
-  //     stop: () => undefined,
-  //     succeed: () => undefined,
-  //     fail: () => undefined,
-  //   };
-  // }
+export async function startSpinner(interactive: boolean, text: string = "") {
+  if (!interactive) {
+    return {
+      stop: () => undefined,
+      succeed: () => undefined,
+      fail: () => undefined,
+    };
+  }
+
   const ora = (await import("ora")).default;
-  return ora(text).start();
+  return ora({
+    text: warmBeige(text || "Waiting for response..."),
+    color: "white",
+    prefixText: softBeige("··"),
+    spinner: {
+      interval: 90,
+      frames: ["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙●∙"],
+    },
+  }).start();
 }
 
 export default {
