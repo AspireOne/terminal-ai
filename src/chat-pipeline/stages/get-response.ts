@@ -41,7 +41,7 @@ export async function getCompletionsResponse(
       params.executionContext.provider.type !== "gemini_openai" &&
       params.executionContext.provider.type !== "openai_compatible"
     ) {
-      completionRequest.reasoning_effort = "medium";
+      completionRequest.reasoning_effort = "high";
     }
     const completion = await openai.chat.completions.create(completionRequest);
     generation?.end({ output: completion });

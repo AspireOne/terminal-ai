@@ -39,7 +39,7 @@ const cli = async (program: Command, executionContext: ExecutionContext) => {
       "Generate a shell command and choose whether to run it",
     )
     .option("--commit", "Generate a git commit command from staged changes")
-    .option("-t, --think", "Enable model thinking (reasoning) at medium level")
+    .option("-t, --think", "Enable model thinking (reasoning) at high level")
     .option("-r, --raw", "Do not format or highlight markdown output")
     .option(
       "-f, --file <path>",
