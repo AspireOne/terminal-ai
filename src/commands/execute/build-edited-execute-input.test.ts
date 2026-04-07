@@ -8,7 +8,7 @@ describe("commands/execute/build-edited-execute-input", () => {
         'python -c "import sys; print(sys.executable)"',
         "use py instead of python",
       ),
-    ).toContain("The original request was:");
+    ).toContain("Original request:");
     expect(
       buildEditedExecuteInput(
         "print the current python path",
@@ -30,5 +30,14 @@ describe("commands/execute/build-edited-execute-input", () => {
         "use py instead of python",
       ),
     ).toContain("use py instead of python");
+    expect(
+      buildEditedExecuteInput(
+        "print the current python path",
+        'python -c "import sys; print(sys.executable)"',
+        "use py instead of python",
+      ),
+    ).toContain(
+      "Terminal AI will run the next response as the replacement command",
+    );
   });
 });

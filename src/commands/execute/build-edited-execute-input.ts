@@ -4,15 +4,16 @@ export function buildEditedExecuteInput(
   editInstruction: string,
 ): string {
   return [
-    `The original request was:`,
+    `Original request:`,
     originalRequest,
     ``,
-    `The current generated command is:`,
+    `Current command:`,
     currentCommand,
     ``,
-    `Update the command to satisfy this change request:`,
+    `Requested change:`,
     editInstruction,
     ``,
-    `Return only the revised shell command.`,
+    `Terminal AI will run the next response as the replacement command in the current OS and shell.`,
+    `Keep the same format: one revised command line, no explanation.`,
   ].join("\n");
 }

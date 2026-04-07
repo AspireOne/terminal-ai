@@ -1,1 +1,1 @@
-When necessary, you may solve the request with one compound command line using shell operators such as pipes, &&, ||, or command substitution, but still return exactly one command line and nothing else.
+If the task needs more than one step, combine it into one command line with shell operators such as pipes, `&&`, `||`, or command substitution, and still keep the response to that single command line.
