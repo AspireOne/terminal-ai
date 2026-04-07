@@ -11,28 +11,32 @@ export enum ExecuteAction {
   Exit = "exit",
 }
 
-export async function selectExecuteAction(): Promise<ExecuteAction> {
-  return await select({
+export function createExecuteActionPrompt() {
+  return {
     message: promptMessage("execute:"),
     choices: [
       {
-        name: promptChoice("Execute", { tag: "RUN" }),
+        name: promptChoice("Execute"),
         value: ExecuteAction.Execute,
         description: promptDescription("Run the current command."),
       },
       {
-        name: promptChoice("Edit", { tag: "EDIT" }),
+        name: promptChoice("Edit"),
         value: ExecuteAction.Edit,
         description: promptDescription(
           "Open the command in your editor first.",
         ),
       },
       {
-        name: promptChoice("Exit", { tag: "EXIT" }),
+        name: promptChoice("Exit"),
         value: ExecuteAction.Exit,
         description: promptDescription("Leave without running anything."),
       },
     ],
     default: ExecuteAction.Execute,
-  });
+  };
+}
+
+export async function selectExecuteAction(): Promise<ExecuteAction> {
+  return await select(createExecuteActionPrompt());
 }

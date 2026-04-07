@@ -57,7 +57,20 @@ export function printHint(hint: string, interactive: boolean) {
   return interactive ? softBeige(hint) : hint;
 }
 
-export async function startSpinner(interactive: boolean, text: string = "") {
+export function createSpinnerOptions(text?: string) {
+  const trimmedText = text?.trim() || "";
+  return {
+    text: trimmedText ? warmBeige(trimmedText) : "",
+    color: "white" as const,
+    prefixText: trimmedText ? softBeige("··") : "",
+    spinner: {
+      interval: 90,
+      frames: ["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙●∙"],
+    },
+  };
+}
+
+export async function startSpinner(interactive: boolean, text?: string) {
   if (!interactive) {
     return {
       stop: () => undefined,
@@ -67,15 +80,7 @@ export async function startSpinner(interactive: boolean, text: string = "") {
   }
 
   const ora = (await import("ora")).default;
-  return ora({
-    text: warmBeige(text || "Waiting for response..."),
-    color: "white",
-    prefixText: softBeige("··"),
-    spinner: {
-      interval: 90,
-      frames: ["∙∙∙", "●∙∙", "∙●∙", "∙∙●", "∙●∙"],
-    },
-  }).start();
+  return ora(createSpinnerOptions(text)).start();
 }
 
 export default {
